@@ -11,6 +11,10 @@ namespace PokeApp
 {
     class Program
     {
+        static Program()
+        {
+            Pokemon Bulbasaur = new Pokemon(1, "bulbasaur", 1, 20);
+        }
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World...");
