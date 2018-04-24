@@ -13,19 +13,50 @@ namespace PokeApp
     {
         static void Main(string[] args)
         {
+            // initialize()
+            bool game = false;
             Pokemon[] Pokemons = {
                 new Pokemon(1, "Bulbasaur", 1, 30),
                 new Pokemon(4, "Charmander", 1, 30),
                 new Pokemon(7, "Squirtle", 1, 30)
             };
 
-            foreach(Pokemon Pokemon in Pokemons)
+            // game setup
+            string gameUserInput = Prompt("Would you like to do battle?").ToLower();
+            if(gameUserInput == "yes" || gameUserInput == "y")
+            {
+                game = true;
+            }
+
+            foreach (Pokemon Pokemon in Pokemons)
             {
                 Console.WriteLine("Name: {0}, Index No.: {1}", Pokemon.Name, Pokemon.Id);
             }
+            Prompt("Choose a pokemon from above that you would like to do battle with: ");
 
+
+            // game start
+            while (game)
+            {
+                Write("Game loop");
+                Console.ReadKey();
+                game = false;
+            }
+            
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey(true);
         }
+
+        static string Prompt(string message)
+        {
+            Console.WriteLine(message);
+            return Console.ReadLine();
+        }
+
+        static void Write(string message)
+        {
+            Console.WriteLine(message);
+        }
+
     }
 }

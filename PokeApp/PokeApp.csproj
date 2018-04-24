@@ -52,6 +52,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game.cs" />
     <Compile Include="Moves.cs" />
     <Compile Include="Pokemon.cs" />
     <Compile Include="Program.cs" />
