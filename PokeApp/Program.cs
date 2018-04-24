@@ -11,10 +11,6 @@ namespace PokeApp
 {
     class Program
     {
-        static Program()
-        {
-
-        }
         static void Main(string[] args)
         {
             Pokemon[] Pokemons = {
