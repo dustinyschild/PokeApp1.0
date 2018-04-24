@@ -11,10 +11,17 @@ namespace PokeApp
 {
     class Program
     {
+        public enum Game
+        {
+            [StringEnumValue("no")]
+            No = 0,
+            [StringEnumValue("yes")]
+            Yes = 1
+        };
+
         static void Main(string[] args)
         {
             // initialize()
-            bool game = false;
             Pokemon[] Pokemons = {
                 new Pokemon(1, "Bulbasaur", 1, 30),
                 new Pokemon(4, "Charmander", 1, 30),
@@ -22,11 +29,7 @@ namespace PokeApp
             };
 
             // game setup
-            string gameUserInput = Prompt("Would you like to do battle?").ToLower();
-            if(gameUserInput == "yes" || gameUserInput == "y")
-            {
-                game = true;
-            }
+            string game = Prompt("Would you like to do battle?").ToLower();
 
             foreach (Pokemon Pokemon in Pokemons)
             {
@@ -36,11 +39,11 @@ namespace PokeApp
 
 
             // game start
-            while (game)
+            while (game == Game.Yes.ToString())
             {
                 Write("Game loop");
                 Console.ReadKey();
-                game = false;
+                game = Game.No.ToString();
             }
             
             Console.WriteLine("Press any key to exit...");
