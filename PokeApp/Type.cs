@@ -2,7 +2,11 @@
 {
     public class Type
     {
-        public string Url { get; }
         public string Name { get; }
+
+        public Type(string name)
+        {
+            this.Name = name;
+        }
     }
 }

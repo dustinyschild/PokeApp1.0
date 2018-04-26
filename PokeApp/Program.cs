@@ -11,38 +11,53 @@ namespace PokeApp
 {
     class Program
     {
-        public enum Game
+        private enum Game
         {
             [StringEnumValue("no")]
             No = 0,
             [StringEnumValue("yes")]
             Yes = 1
         };
+        
+
+
+        private static readonly Move[] Moves =
+        {
+            new Move("Bite"), 
+            new Move("Kick"), 
+            new Move("Punch"), 
+            new Move("Chop"),
+        };
+
+        private static readonly Type[] Types =
+        {
+            new Type("grass")
+        };
+
+        private static readonly Pokemon[] Pokemons = {
+            new Pokemon(1, "Bulbasaur", 1, 30, 10, Moves, Types),
+            new Pokemon(4, "Charmander", 1, 30, 20, Moves, Types),
+            new Pokemon(7, "Squirtle", 1, 30, 30, Moves, Types)
+        };
 
         static void Main(string[] args)
         {
-            // initialize()
-            Pokemon[] Pokemons = {
-                new Pokemon(1, "Bulbasaur", 1, 30),
-                new Pokemon(4, "Charmander", 1, 30),
-                new Pokemon(7, "Squirtle", 1, 30)
-            };
-
             // game setup
-            string game = Prompt("Would you like to do battle?").ToLower();
+            var game = Prompt("Would you like to do battle?").ToLower();
 
             foreach (Pokemon Pokemon in Pokemons)
             {
-                Console.WriteLine("Name: {0}, Index No.: {1}", Pokemon.Name, Pokemon.Id);
+                Pokemon.LogAllStats();
             }
             Prompt("Choose a pokemon from above that you would like to do battle with: ");
-
-
+    
+            Console.WriteLine(game);
+            Console.WriteLine(Game.Yes.ToString().ToLower());
             // game start
-            while (game == Game.Yes.ToString())
+            while (game == Game.Yes.ToString().ToLower())
             {
                 Write("Game loop");
-                Console.ReadKey();
+                Console.ReadKey(true);
                 game = Game.No.ToString();
             }
             
@@ -50,13 +65,13 @@ namespace PokeApp
             Console.ReadKey(true);
         }
 
-        static string Prompt(string message)
+        private static string Prompt(string message)
         {
             Console.WriteLine(message);
             return Console.ReadLine();
         }
 
-        static void Write(string message)
+        private static void Write(string message)
         {
             Console.WriteLine(message);
         }
