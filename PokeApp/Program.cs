@@ -19,14 +19,12 @@ namespace PokeApp
             Yes = 1
         };
         
-
-
         private static readonly Move[] Moves =
         {
-            new Move("Bite"), 
-            new Move("Kick"), 
-            new Move("Punch"), 
-            new Move("Chop"),
+            new Move("Bite"),
+            new Move("Kick"),
+            new Move("Punch"),
+            new Move("Chop")
         };
 
         private static readonly Type[] Types =
@@ -44,21 +42,17 @@ namespace PokeApp
         {
             // game setup
             var game = Prompt("Would you like to do battle?").ToLower();
-
-            foreach (Pokemon Pokemon in Pokemons)
-            {
-                Pokemon.LogAllStats();
-            }
-            Prompt("Choose a pokemon from above that you would like to do battle with: ");
-    
-            Console.WriteLine(game);
-            Console.WriteLine(Game.Yes.ToString().ToLower());
-            // game start
             while (game == Game.Yes.ToString().ToLower())
             {
+                foreach (Pokemon Pokemon in Pokemons)
+                {
+                    Pokemon.LogAllStats();
+                }
+                Prompt("Choose a pokemon from above that you would like to do battle with: ");
+
+                // game start
                 Write("Game loop");
-                Console.ReadKey(true);
-                game = Game.No.ToString();
+                game = Game.No.ToString().ToLower();
             }
             
             Console.WriteLine("Press any key to exit...");
