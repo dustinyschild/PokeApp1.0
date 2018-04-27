@@ -19,6 +19,8 @@ namespace PokeApp
             Yes = 1
         };
 
+        static Random random = new Random();
+
         private static readonly Move[] Moves =
         {
             new Move("Bite"),
@@ -61,8 +63,11 @@ namespace PokeApp
                 while (playerPokemon == null)
                 {
                     playerPokemonChoice = Prompt("Invalid input, please try again:");
-                    playerPokemon = Player.Pokemon.Where(Pokemon => Pokemon.Name == playerPokemonChoice).FirstOrDefault();
+                    playerPokemon = Player.Pokemon.Where(pokemon => pokemon.Name == playerPokemonChoice).FirstOrDefault();
                 }
+
+                Pokemon opponentPokemon = GenerateRandomPokemon(Opponent);
+                Write(opponentPokemon.Name);
 
                 // game start
                 Write("Game loop");
@@ -84,5 +89,10 @@ namespace PokeApp
             Console.WriteLine(message);
         }
 
+        private static Pokemon GenerateRandomPokemon(Trainer trainer)
+        {
+            var index = random.Next(trainer.Pokemon.Length);
+            return trainer.Pokemon[index];
+        }
     }
 }
