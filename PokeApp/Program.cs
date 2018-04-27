@@ -58,19 +58,43 @@ namespace PokeApp
                 Player.ListAllPokemon();
 
                 var playerPokemonChoice = Prompt("Choose a pokemon from above that you would like to do battle with: ");
-                Pokemon playerPokemon = Player.Pokemon.Where(Pokemon => Pokemon.Name == playerPokemonChoice).FirstOrDefault();
+                Pokemon playerPokemon = Player.Pokemon.FirstOrDefault(Pokemon => String.Equals(Pokemon.Name, playerPokemonChoice, StringComparison.CurrentCultureIgnoreCase));
 
                 while (playerPokemon == null)
                 {
                     playerPokemonChoice = Prompt("Invalid input, please try again:");
-                    playerPokemon = Player.Pokemon.Where(pokemon => pokemon.Name == playerPokemonChoice).FirstOrDefault();
+                    playerPokemon = Player.Pokemon.FirstOrDefault(Pokemon => String.Equals(Pokemon.Name, playerPokemonChoice, StringComparison.CurrentCultureIgnoreCase));
                 }
 
                 Pokemon opponentPokemon = GenerateRandomPokemon(Opponent);
                 Write(opponentPokemon.Name);
 
                 // game start
-                Write("Game loop");
+                if (playerPokemon.Speed > opponentPokemon.Speed)
+                {
+                    Write($"{opponentPokemon.Name} will go first.");
+                    Move opponentMove = GenerateRandomMove(opponentPokemon.Moves);
+                }
+                else
+                {
+                    Write($"{playerPokemon.Name} will go first.");
+                    foreach (Move Move in playerPokemon.Moves)
+                    {
+                        Write(Move.Name);
+                    }
+
+                    var playerMoveChoice = Prompt("What move would you like to use?");
+                    Move playerMove = playerPokemon.Moves.FirstOrDefault(move => String.Equals(move.Name, playerMoveChoice, StringComparison.CurrentCultureIgnoreCase));
+
+                    while (playerMove == null)
+                    {
+                        playerMoveChoice = Prompt("Invalid input, please try again:");
+                        playerMove = playerPokemon.Moves.FirstOrDefault(move => String.Equals(move.Name, playerMoveChoice, StringComparison.CurrentCultureIgnoreCase));
+                    }
+
+                    Write(playerMove.Name);
+                }
+
                 game = Game.No.ToString().ToLower();
             }
             
@@ -89,10 +113,22 @@ namespace PokeApp
             Console.WriteLine(message);
         }
 
+        //Opponent Generators
         private static Pokemon GenerateRandomPokemon(Trainer trainer)
         {
             var index = random.Next(trainer.Pokemon.Length);
             return trainer.Pokemon[index];
+        }
+
+        private static Move GenerateRandomMove(Move[] moves)
+        {
+            var index = random.Next(moves.Length);
+            return moves[index];
+        }
+
+        private static void Turn(Pokemon pokemon)
+        {
+
         }
     }
 }
