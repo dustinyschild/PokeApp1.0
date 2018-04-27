@@ -18,7 +18,7 @@ namespace PokeApp
             [StringEnumValue("yes")]
             Yes = 1
         };
-        
+
         private static readonly Move[] Moves =
         {
             new Move("Bite"),
@@ -38,24 +38,38 @@ namespace PokeApp
             new Pokemon(7, "Squirtle", 1, 30, 30, Moves, Types)
         };
 
+        private static Trainer Player = new Trainer("Player", Pokemons);
+        private static Trainer Opponent = new Trainer("Stormy Daniels", Pokemons);
+
         static void Main(string[] args)
         {
             // game setup
             var game = Prompt("Would you like to do battle?").ToLower();
             while (game == Game.Yes.ToString().ToLower())
             {
-                foreach (Pokemon Pokemon in Pokemons)
+                var playerName = Prompt("What is your name?");
+                if (playerName != "")
                 {
-                    Pokemon.LogAllStats();
+                    Player.ChangeTrainerName(playerName);
                 }
-                Prompt("Choose a pokemon from above that you would like to do battle with: ");
+
+                Player.ListAllPokemon();
+
+                var playerPokemonChoice = Prompt("Choose a pokemon from above that you would like to do battle with: ");
+                Pokemon playerPokemon = Player.Pokemon.Where(Pokemon => Pokemon.Name == playerPokemonChoice).FirstOrDefault();
+
+                while (playerPokemon == null)
+                {
+                    playerPokemonChoice = Prompt("Invalid input, please try again:");
+                    playerPokemon = Player.Pokemon.Where(Pokemon => Pokemon.Name == playerPokemonChoice).FirstOrDefault();
+                }
 
                 // game start
                 Write("Game loop");
                 game = Game.No.ToString().ToLower();
             }
             
-            Console.WriteLine("Press any key to exit...");
+            Console.WriteLine("Thanks for playing!");
             Console.ReadKey(true);
         }
 
