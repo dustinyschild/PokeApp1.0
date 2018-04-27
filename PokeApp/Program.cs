@@ -69,30 +69,29 @@ namespace PokeApp
                 Pokemon opponentPokemon = GenerateRandomPokemon(Opponent);
                 Write(opponentPokemon.Name);
 
+                Move opponentMove = GenerateRandomMove(opponentPokemon.Moves);
+
+                foreach (Move Move in playerPokemon.Moves)
+                {
+                    Write(Move.Name);
+                }
+                var playerMoveChoice = Prompt("What move would you like to use?");
+                Move playerMove = playerPokemon.Moves.FirstOrDefault(move => String.Equals(move.Name, playerMoveChoice, StringComparison.CurrentCultureIgnoreCase));
+                while (playerMove == null)
+                {
+                    playerMoveChoice = Prompt("Invalid input, please try again:");
+                    playerMove = playerPokemon.Moves.FirstOrDefault(move => String.Equals(move.Name, playerMoveChoice, StringComparison.CurrentCultureIgnoreCase));
+                }
+                Write(playerMove.Name);
+
                 // game start
                 if (playerPokemon.Speed > opponentPokemon.Speed)
                 {
-                    Write($"{opponentPokemon.Name} will go first.");
-                    Move opponentMove = GenerateRandomMove(opponentPokemon.Moves);
+                    Write($"{playerPokemon.Name} will go first.");
                 }
                 else
                 {
-                    Write($"{playerPokemon.Name} will go first.");
-                    foreach (Move Move in playerPokemon.Moves)
-                    {
-                        Write(Move.Name);
-                    }
-
-                    var playerMoveChoice = Prompt("What move would you like to use?");
-                    Move playerMove = playerPokemon.Moves.FirstOrDefault(move => String.Equals(move.Name, playerMoveChoice, StringComparison.CurrentCultureIgnoreCase));
-
-                    while (playerMove == null)
-                    {
-                        playerMoveChoice = Prompt("Invalid input, please try again:");
-                        playerMove = playerPokemon.Moves.FirstOrDefault(move => String.Equals(move.Name, playerMoveChoice, StringComparison.CurrentCultureIgnoreCase));
-                    }
-
-                    Write(playerMove.Name);
+                    Write($"{opponentPokemon.Name} will go first.");
                 }
 
                 game = Game.No.ToString().ToLower();
