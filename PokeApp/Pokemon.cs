@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PokeApp
 {
-    class Pokemon
+    public class Pokemon
     {
         public int Id { get; }
         public string Name { get; set; }
@@ -15,7 +15,7 @@ namespace PokeApp
         public int Level { get; set; }
         public int Hp { get; set; }
         public int Speed { get; set; }
-        public Type[] Types { get; set; }
+        public Element[] Elements { get; set; }
         public Move[] Moves { get; set; }
 
         public Pokemon(
@@ -25,7 +25,7 @@ namespace PokeApp
             int hp,
             int speed,
             Move[] moves,
-            Type[] types
+            Element[] elements
         )
         {
             this.Id = id;
@@ -35,7 +35,7 @@ namespace PokeApp
             this.Hp = hp;
             this.Speed = speed;
             this.Moves = moves;
-            this.Types = types;
+            this.Elements = elements;
         }
 
         public void ChangeNickname(string nickname)
@@ -59,9 +59,9 @@ namespace PokeApp
                 Console.WriteLine($"    {Move.Name}");
             }
             Console.WriteLine("Types:");
-            foreach (Type Type in Types)
+            foreach (Element Element in Elements)
             {
-                Console.WriteLine($"    {Type.Name}");
+                Console.WriteLine($"    {Element}");
             }
         }
     }

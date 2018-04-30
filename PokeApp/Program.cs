@@ -19,25 +19,27 @@ namespace PokeApp
             Yes = 1
         };
 
+        private static Action DefaultAction = new Action(ActionType.Attack, 5);
+
         static Random random = new Random();
 
         private static readonly Move[] Moves =
         {
-            new Move("Bite"),
-            new Move("Kick"),
-            new Move("Punch"),
-            new Move("Chop")
+            new Move("Bite", DefaultAction),
+            new Move("Kick", DefaultAction),
+            new Move("Punch", DefaultAction),
+            new Move("Chop", DefaultAction)
         };
 
-        private static readonly Type[] Types =
+        private static readonly Element[] Elements =
         {
-            new Type("grass")
+            Element.Grass
         };
 
         private static readonly Pokemon[] Pokemons = {
-            new Pokemon(1, "Bulbasaur", 1, 30, 10, Moves, Types),
-            new Pokemon(4, "Charmander", 1, 30, 20, Moves, Types),
-            new Pokemon(7, "Squirtle", 1, 30, 30, Moves, Types)
+            new Pokemon(1, "Bulbasaur", 1, 30, 10, Moves, new Element[] { Element.Grass }),
+            new Pokemon(4, "Charmander", 1, 30, 20, Moves, new Element[] { Element.Fire }),
+            new Pokemon(7, "Squirtle", 1, 30, 30, Moves, new Element[] { Element.Water })
         };
 
         private static Trainer Player = new Trainer("Player", Pokemons);
@@ -89,11 +91,12 @@ namespace PokeApp
                 if (playerPokemon.Speed > opponentPokemon.Speed)
                 {
                     Write($"{playerPokemon.Name} will go first.");
-
+                    Turn(opponentPokemon, playerMove);
                 }
                 else
                 {
                     Write($"{opponentPokemon.Name} will go first.");
+                    Turn(playerPokemon, opponentMove);
                 }
 
                 game = Game.No.ToString().ToLower();
@@ -127,9 +130,11 @@ namespace PokeApp
             return moves[index];
         }
 
-        private static void Turn(Pokemon pokemon)
+        private static void Turn(Pokemon receiver, Move move)
         {
-
+            Console.WriteLine(receiver.Hp);
+            move.ApplyAction(receiver);
+            Console.WriteLine(receiver.Hp);
         }
     }
 }
