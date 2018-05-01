@@ -1,11 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PokeApp
 {
@@ -180,7 +174,8 @@ namespace PokeApp
                 Write("You win!");
             else if (opponent.Hp > 0 && player.Hp <= 0)
                 Write($"{opponent.Name} wins!");
-            else Write("Winner is unclear, it's a draw!");
+            else
+                Write("Winner is unclear, it's a draw!");
         }
 
         private static bool CheckHealth(Pokemon player, Pokemon opponent)
