@@ -150,7 +150,8 @@ namespace PokeApp
                     Write($"{player.Name} health: {player.Hp}");
                     Write($"{opponent.Name} health: {opponent.Hp}");
                     round = CheckHealth(player, opponent);
-                    if (!round) return;
+                    Pause();
+                    if (!round) break;
 
                     Turn(opponent, player, opponentMove);
                     Write($"{player.Name} health: {player.Hp}");
@@ -164,7 +165,8 @@ namespace PokeApp
                     Write($"{player.Name} health: {player.Hp}");
                     Write($"{opponent.Name} health: {opponent.Hp}");
                     round = CheckHealth(player, opponent);
-                    if (!round) return;
+                    Pause();
+                    if (!round) break;
 
                     Turn(player, opponent, playerMove);
                     Write($"{player.Name} health: {player.Hp}");
@@ -173,11 +175,17 @@ namespace PokeApp
                     Pause();
                 }
             } while (round);
+
+            if (player.Hp > 0 && opponent.Hp <= 0)
+                Write("You win!");
+            else if (opponent.Hp > 0 && player.Hp <= 0)
+                Write($"{opponent.Name} wins!");
+            else Write("Winner is unclear, it's a draw!");
         }
 
-        public static bool CheckHealth(Pokemon player, Pokemon opponent)
+        private static bool CheckHealth(Pokemon player, Pokemon opponent)
         {
-            return player.Hp > 0 || opponent.Hp > 0;
+            return !(player.Hp >= 0 && opponent.Hp <= 0 || opponent.Hp >= 0 && player.Hp <= 0);
         }
     }
 }
