@@ -156,6 +156,7 @@ namespace PokeApp
                     Write($"{player.Name} health: {player.Hp}");
                     Write($"{opponent.Name} health: {opponent.Hp}");
                     round = CheckHealth(player, opponent);
+                    Pause();
                 }
                 else
                 {
@@ -169,6 +170,7 @@ namespace PokeApp
                     Write($"{player.Name} health: {player.Hp}");
                     Write($"{opponent.Name} health: {opponent.Hp}");
                     round = CheckHealth(player, opponent);
+                    Pause();
                 }
             } while (round);
         }
