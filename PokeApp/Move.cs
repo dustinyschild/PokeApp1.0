@@ -22,6 +22,7 @@ namespace PokeApp
             {
                 case ActionType.Attack:
                     receiver.Hp -= Action.Value;
+                    Console.WriteLine($"{receiver.Name}'s health has been lowered to {receiver.Hp}!");
                     break;
                 case ActionType.Defense:
                     Console.WriteLine("Warning: Defensive moves are not yet implemented.");

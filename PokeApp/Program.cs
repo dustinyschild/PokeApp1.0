@@ -9,14 +9,12 @@ using System.Threading.Tasks;
 
 namespace PokeApp
 {
-    class Program
+    public class Program
     {
         private enum Game
         {
-            [StringEnumValue("no")]
-            No = 0,
-            [StringEnumValue("yes")]
-            Yes = 1
+            [StringEnumValue("no")] No = 0,
+            [StringEnumValue("yes")] Yes = 1
         };
 
         private static Action DefaultAction = new Action(ActionType.Attack, 5);
@@ -31,15 +29,11 @@ namespace PokeApp
             new Move("Chop", DefaultAction)
         };
 
-        private static readonly Element[] Elements =
+        private static readonly Pokemon[] Pokemons =
         {
-            Element.Grass
-        };
-
-        private static readonly Pokemon[] Pokemons = {
-            new Pokemon(1, "Bulbasaur", 1, 30, 10, Moves, new Element[] { Element.Grass }),
-            new Pokemon(4, "Charmander", 1, 30, 20, Moves, new Element[] { Element.Fire }),
-            new Pokemon(7, "Squirtle", 1, 30, 30, Moves, new Element[] { Element.Water })
+            new Pokemon(1, "Bulbasaur", 1, 30, 10, Moves, new Element[] {Element.Grass}),
+            new Pokemon(4, "Charmander", 1, 30, 20, Moves, new Element[] {Element.Fire}),
+            new Pokemon(7, "Squirtle", 1, 30, 30, Moves, new Element[] {Element.Water})
         };
 
         private static Trainer Player = new Trainer("Player", Pokemons);
@@ -57,51 +51,34 @@ namespace PokeApp
                     Player.ChangeTrainerName(playerName);
                 }
 
+                Console.WriteLine("Your choices:");
                 Player.ListAllPokemon();
 
-                string playerPokemonChoice = null;
                 Pokemon playerPokemon = null;
-                do
+
+                string playerPokemonChoice = Prompt("Please choose a Pokemon:");
+                while (playerPokemon == null)
                 {
-                    playerPokemonChoice = Prompt("Invalid input, please try again:");
-                    playerPokemon = Player.Pokemon.FirstOrDefault(Pokemon => String.Equals(Pokemon.Name, playerPokemonChoice, StringComparison.CurrentCultureIgnoreCase));
-                } while (playerPokemon == null);
-
-                    Pokemon opponentPokemon = GenerateRandomPokemon(Opponent);
-                Write(opponentPokemon.Name);
-
-                Move opponentMove = GenerateRandomMove(opponentPokemon.Moves);
-
-                foreach (Move Move in playerPokemon.Moves)
-                {
-                    Write(Move.Name);
+                    playerPokemon = Player.Pokemon.FirstOrDefault(Pokemon =>
+                        String.Equals(Pokemon.Name, playerPokemonChoice, StringComparison.CurrentCultureIgnoreCase));
+                    if (playerPokemon == null)
+                        playerPokemonChoice = Prompt("Invalid input, please try again:");
                 }
 
-                string playerMoveChoice = null;
-                Move playerMove = null;
-                do
-                {
-                    playerMoveChoice = Prompt("Invalid input, please try again:");
-                    playerMove = playerPokemon.Moves.FirstOrDefault(move =>
-                        String.Equals(move.Name, playerMoveChoice, StringComparison.CurrentCultureIgnoreCase));
-                } while (playerMove == null);
-                Write(playerMove.Name);
+                Pokemon opponentPokemon = GenerateRandomPokemon(Opponent);
 
-                // game start
                 if (playerPokemon.Speed > opponentPokemon.Speed)
                 {
-                    Write($"{playerPokemon.Name} will go first.");
-                    Turn(opponentPokemon, playerMove);
+                    Round(playerPokemon, opponentPokemon);
                 }
                 else
                 {
-                    Write($"{opponentPokemon.Name} will go first.");
-                    Turn(playerPokemon, opponentMove);
+                    Round(opponentPokemon,playerPokemon);
                 }
 
                 game = Game.No.ToString().ToLower();
             }
-            
+
             Console.WriteLine("Thanks for playing!");
             Console.ReadKey(true);
         }
@@ -117,7 +94,11 @@ namespace PokeApp
             Console.WriteLine(message);
         }
 
-        //Opponent Generators
+        private static void Pause()
+        {
+            Console.ReadKey(true);
+        }
+
         private static Pokemon GenerateRandomPokemon(Trainer trainer)
         {
             var index = random.Next(trainer.Pokemon.Length);
@@ -130,11 +111,71 @@ namespace PokeApp
             return moves[index];
         }
 
-        private static void Turn(Pokemon receiver, Move move)
+        private static void Turn(Pokemon initiator, Pokemon receiver, Move move)
         {
-            Console.WriteLine(receiver.Hp);
+            Write($"{initiator.Name} uses {move.Name}!");
             move.ApplyAction(receiver);
-            Console.WriteLine(receiver.Hp);
+        }
+
+        private static void Round(Pokemon player, Pokemon opponent)
+        {
+            //generate opponent move
+            Move opponentMove = GenerateRandomMove(opponent.Moves);
+
+            //clear player move and prompt user
+            foreach (Move Move in player.Moves)
+                Write(Move.Name);
+
+            Move playerMove = null;
+            string playerMoveChoice = Prompt("What move would you like to use?:");
+            while (playerMove == null)
+            {
+                playerMove = player.Moves.FirstOrDefault(move =>
+                    String.Equals(move.Name, playerMoveChoice, StringComparison.CurrentCultureIgnoreCase));
+                if (playerMove == null)
+                    playerMoveChoice = Prompt("Invalid input, please try again:");
+            }
+
+            //update user on selected moves
+            Write($"You chose {playerMove.Name}!");
+            Write($"{opponent.Name} chose {opponentMove.Name}");
+
+            Write(player.Speed > opponent.Speed ? $"{player.Name} will go first." : $"{opponent.Name} will go first.");
+            bool round = true;
+            do
+            {
+                if (player.Speed > opponent.Speed)
+                {
+                    Turn(player, opponent, playerMove);
+                    Write($"{player.Name} health: {player.Hp}");
+                    Write($"{opponent.Name} health: {opponent.Hp}");
+                    round = CheckHealth(player, opponent);
+                    if (!round) return;
+
+                    Turn(opponent, player, opponentMove);
+                    Write($"{player.Name} health: {player.Hp}");
+                    Write($"{opponent.Name} health: {opponent.Hp}");
+                    round = CheckHealth(player, opponent);
+                }
+                else
+                {
+                    Turn(opponent, player, opponentMove);
+                    Write($"{player.Name} health: {player.Hp}");
+                    Write($"{opponent.Name} health: {opponent.Hp}");
+                    round = CheckHealth(player, opponent);
+                    if (!round) return;
+
+                    Turn(player, opponent, playerMove);
+                    Write($"{player.Name} health: {player.Hp}");
+                    Write($"{opponent.Name} health: {opponent.Hp}");
+                    round = CheckHealth(player, opponent);
+                }
+            } while (round);
+        }
+
+        public static bool CheckHealth(Pokemon player, Pokemon opponent)
+        {
+            return player.Hp > 0 || opponent.Hp > 0;
         }
     }
 }
